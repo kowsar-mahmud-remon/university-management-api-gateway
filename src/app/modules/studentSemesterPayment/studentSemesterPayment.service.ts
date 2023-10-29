@@ -3,10 +3,33 @@ import { IGenericResponse } from '../../../interfaces/common';
 import { CoreService } from '../../../shared/axios';
 
 const getMyPayment = async (req: Request): Promise<IGenericResponse> => {
-  const response: IGenericResponse = await CoreService.get(
-    '/student-semester-payments',
+  const response: IGenericResponse = await CoreService.get('/student-semester-payments', {
+    params: req.query,
+    headers: {
+      Authorization: req.headers.authorization
+    }
+  });
+  return response;
+};
+
+const initiatePayment = async (req: Request): Promise<IGenericResponse> => {
+  const response: IGenericResponse = await CoreService.post(
+    '/student-semester-payments/initiate-payment',
     {
-      params: req.query,
+      params: req.body,
+      headers: {
+        Authorization: req.headers.authorization
+      }
+    }
+  );
+  return response;
+};
+
+const completePayment = async (req: Request): Promise<IGenericResponse> => {
+  const response: IGenericResponse = await CoreService.post(
+    '/student-semester-payments/complete-payment',
+    {
+      params: req.body,
       headers: {
         Authorization: req.headers.authorization
       }
@@ -16,5 +39,7 @@ const getMyPayment = async (req: Request): Promise<IGenericResponse> => {
 };
 
 export const StudentSemesterPaymentService = {
-  getMyPayment
+  getMyPayment,
+  initiatePayment,
+  completePayment
 };
